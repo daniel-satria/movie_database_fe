@@ -1,35 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Movies = () => {
     const [movies, setMovies] = useState([]);
 
     useEffect(() => {
-        let movieList = [
-            {
-                id: 1,
-                title: "Highlander",
-                release_date: "1955-12-31",
-                runtime: 100,
-                mpaa_rating: "R",
-                description: "Some long description",
-            },
-            {
-                id: 2,
-                title: "Scoffield",
-                release_date: "1945-1-30",
-                runtime: 126,
-                mpaa_rating: "PG-13",
-                description: "Some long description",
-            },
-        ];
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
 
-        setMovies(movieList)
+        const requestOptions = {
+            method: "GET",
+            headers: headers,
+        }
+
+        fetch(`http://localhost:8080/movies`, requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                setMovies(data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
     }, []);
 
     return (
         <div>
-            <h2> Movies </h2>
+            <h2>Movies</h2>
             <hr />
             <table className="table table-striped table-hover">
                 <thead>
@@ -43,7 +40,7 @@ const Movies = () => {
                     {movies.map((m) => (
                         <tr key={m.id}>
                             <td>
-                                <Link to={`/movies/${m.id}`} >
+                                <Link to={`/movies/${m.id}`}>
                                     {m.title}
                                 </Link>
                             </td>
