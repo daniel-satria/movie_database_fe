@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Ticket from '/Users/nihilisme/Documents/learning/movies-front-end-react/movies-front-end-react/src/images/movie_tickets.jpg';
+import Ticket from '../images/movie_tickets.jpg';
 
 const Home = () => {
 
