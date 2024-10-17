@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 const Movies = () => {
     const [movies, setMovies] = useState([]);
+    const { jwtToken } = useOutletContext();
+    const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect( () => {
+        if (jwtToken === "") {
+            navigate("/login");
+            return
+        }
+
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
+        headers.append("Authorization", "Bearer " + jwtToken);
 
         const requestOptions = {
             method: "GET",
@@ -22,9 +30,9 @@ const Movies = () => {
                 console.log(err);
             })
 
-    }, []);
+    }, [jwtToken, navigate]);
 
-    return (
+    return(
         <div>
             <h2>Movies</h2>
             <hr />
@@ -46,7 +54,7 @@ const Movies = () => {
                             </td>
                             <td>{m.release_date}</td>
                             <td>{m.mpaa_rating}</td>
-                        </tr>
+                        </tr>    
                     ))}
                 </tbody>
             </table>

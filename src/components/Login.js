@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Input from "./form/Input";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import Input from "./form/Input";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -9,12 +9,14 @@ const Login = () => {
     const { setJwtToken } = useOutletContext();
     const { setAlertClassName } = useOutletContext();
     const { setAlertMessage } = useOutletContext();
+    const { toggleRefresh } = useOutletContext();
 
-    const navigate =  useNavigate();
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        
+        // build the request payload
         let payload = {
             email: email,
             password: password,
@@ -23,9 +25,9 @@ const Login = () => {
         const requestOptions = {
             method: "POST",
             headers: {
-                'Content-Type' : 'application/json'
+                'Content-Type': 'application/json'
             },
-            credentials: "include",
+            credentials: 'include',
             body: JSON.stringify(payload),
         }
 
@@ -39,19 +41,19 @@ const Login = () => {
                     setJwtToken(data.access_token);
                     setAlertClassName("d-none");
                     setAlertMessage("");
-                    navigate("/")
+                    toggleRefresh(true);
+                    navigate("/");
                 }
             })
             .catch(error => {
                 setAlertClassName("alert-danger");
                 setAlertMessage(error);
             })
-
     }
 
-    return (
-        <div className="col-md-6 offset-md-1">
-            <h2> Login </h2>
+    return(
+        <div className="col-md-6 offset-md-3">
+            <h2>Login</h2>
             <hr />
 
             <form onSubmit={handleSubmit}>
@@ -69,17 +71,19 @@ const Login = () => {
                     type="password"
                     className="form-control"
                     name="password"
-                    autoComplete="pasword-new"
+                    autoComplete="password-new"
                     onChange={(event) => setPassword(event.target.value)}
                 />
 
-                <br />
-                
-                <input
+                <hr />
+
+                <input 
                     type="submit"
                     className="btn btn-primary"
                     value="Login"
                 />
+
+
             </form>
         </div>
     )
