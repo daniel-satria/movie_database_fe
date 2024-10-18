@@ -1,27 +1,19 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Movies = () => {
     const [movies, setMovies] = useState([]);
-    const { jwtToken } = useOutletContext();
-    const navigate = useNavigate();
 
     useEffect( () => {
-        if (jwtToken === "") {
-            navigate("/login");
-            return
-        }
-
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
-        headers.append("Authorization", "Bearer " + jwtToken);
 
         const requestOptions = {
             method: "GET",
             headers: headers,
         }
 
-        fetch(`http://localhost:8080/movies`, requestOptions)
+        fetch(`/movies`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 setMovies(data);
@@ -30,7 +22,7 @@ const Movies = () => {
                 console.log(err);
             })
 
-    }, [jwtToken, navigate]);
+    }, []);
 
     return(
         <div>
